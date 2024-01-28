@@ -74,12 +74,13 @@ void VaciosGenerales(char *medicosEspecialidad[], int especialidad, int medicosP
 
 void IngresarCitas(char *medicosEspecialidad[], int especialidad, int medicosPorEspecialidad, int horarios, int dias, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS])
 {
-    int k, i, j, d;
     char resp[4];
     char *SemanaDias[] = {"1.Lun", "2.Mar", "3.Mie", "4.Jue", "5.Vie"};
-    int comprobacion;
+
     do
     {
+        int k, i, j, d;
+
         printf("Desea ingresar datos? (si/no):\n");
         scanf("%3s", resp);
 
@@ -122,11 +123,10 @@ void IngresarCitas(char *medicosEspecialidad[], int especialidad, int medicosPor
             {
                 printf("La cita ya esta ocupada. Elija otra.\n");
             }
-            break;
         }
-
     } while (strcmp(resp, "si") == 0);
 }
+
 
 void MostrarCitas(char *medicosEspecialidad[], int especialidad, int medicosPorEspecialidad, int horarios, int dias, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS])
 {

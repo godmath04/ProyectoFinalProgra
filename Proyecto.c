@@ -15,7 +15,7 @@ struct CitaMedica
     // int hora;
 };
 
-// Rellenar la Matriz con la palabra Vacio para verificar que no haya citas
+// Rellenar la Matriz con la palabra Vacio para indicar que no hay citas
 void InicializarMatriz(struct CitaMedica MatrizCitas[][6][5], int medicosG, int horarios, int dias)
 {
     for (int k = 0; k < medicosG; k++)
@@ -32,43 +32,54 @@ void InicializarMatriz(struct CitaMedica MatrizCitas[][6][5], int medicosG, int 
 void IngresarCitas(int medicosG, int horarios, int dias, struct CitaMedica MatrizCitas[medicosG][horarios][dias])
 {
     // Variables
-    int k, i, j;
+    int k, i, j, d;
     char *Medicos[] = {"Pablo Villota", "Galo Guevara", "Rafalea Yanouch"};
+    char *SemanaDias[] = {"1.Lun", "2.Mar", "3.Mie", "4.Jue", "5.Vie"};
     // EL usuario debe mencionar si desea ingresar una cita
     char resp[4];
-    printf("Desea ingresar datos? (si/no):\n");
-    fgets(resp, sizeof(resp), stdin);
-    resp[strcspn(resp, "\n")] = '\0';
-    if (strcmp(resp, "no") == 0)
+    do
     {
-        return;
-    }
+        printf("Desea ingresar datos? (si/no):\n");
+        fgets(resp, sizeof(resp), stdin);
+        resp[strcspn(resp, "\n")] = '\0';
 
-    // Eleccion del m'edico
-    printf("Ingrese el numero del medico:");
-    scanf("%d", &k);
-    getchar();
-    // Elecion de hora
-    printf("Ingrese el turno al que desea acceder: ");
-    scanf("%d", &i);
-    getchar();
+        // Limpiar el buffer del teclado después de la entrada de datos
+        while (getchar() != '\n')
+            ;
 
-    printf("Ingrese el numero de dia (1. Lunes/2.Martes/3.Miercoles/4.Jueves/5.Viernes): ");
-    scanf("%d", &j);
-    getchar();
+        // VERIFICAR QUE YA SE HAYA PUESTO EL NO
+         if (strcmp(resp, "si") != 0)
+        {
+            break;
+        }
+        // Eleccion del m'edico
+        printf("Ingrese el numero del medico:");
+        scanf("%d", &k);
+        d = k - 1;
+        getchar();
+        // Elecion de hora
+        printf("Ingrese el turno al que desea acceder: ");
+        scanf("%d", &i);
+        getchar();
 
-    // Ingresar la información para la cita
-    printf("Ingrese la información para la cita del medico %s, hora %d, dia %d:\n", Medicos[k], i, j);
-    printf("Nombre del paciente: ");
-    fgets(MatrizCitas[k - 1][i - 1][j - 1].paciente, sizeof(MatrizCitas[k - 1][i - 1][j - 1].paciente), stdin);
+        printf("Ingrese el numero de dia:\n1. Lunes\n2.Martes\n3.Miercoles\n4.Jueves\n5.Viernes\n");
+        scanf("%d", &j);
+        getchar();
 
-    // Limpiar el buffer del teclado después de la entrada de datossi
+        // Ingresar la información para la cita
+        printf("Ingrese la informacion para la cita con el medico \'%s\', en el turno %d, el dia %s:\n", Medicos[d], i, SemanaDias[j]);
+        printf("Nombre del paciente: ");
+        fgets(MatrizCitas[k - 1][i - 1][j - 1].paciente, sizeof(MatrizCitas[k - 1][i - 1][j - 1].paciente), stdin);
 
-    while (getchar() != '\n')
-        ;
+        // Limpiar el buffer del teclado después de la entrada de datossi
 
-    // Eliminar el salto de línea del final de la cadena
-    MatrizCitas[k - 1][i - 1][j - 1].paciente[strcspn(MatrizCitas[k - 1][i - 1][j - 1].paciente, "\n")] = '\0';
+        while (getchar() != '\n')
+            ;
+
+        // Eliminar el salto de línea del final de la cadena
+        MatrizCitas[k - 1][i - 1][j - 1].paciente[strcspn(MatrizCitas[k - 1][i - 1][j - 1].paciente, "\n")] = '\0';
+
+    } while (strcmp(resp, "si") == 0);
 }
 
 // Creo una matriz 3D para que la profundidad indique los m'edicos , la fila los horarios y la columna los d'ias
@@ -91,7 +102,7 @@ void MedicosGenerales(int medicosG, int horarios, int dias, struct CitaMedica Ma
 
         for (int i = 0; i < horarios; i++)
         {
-            printf("Hora %d:\t", i + 1);
+            printf("Turno %d:\t", i + 1);
             for (int j = 0; j < dias; j++)
             {
                 // MatrizCitas[k][i][j] = rand() % 11;

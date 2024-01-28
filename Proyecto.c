@@ -81,14 +81,13 @@ void IngresarCitas(char *medicosEspecialidad[], int especialidad, int medicosPor
     do
     {
         printf("Desea ingresar datos? (si/no):\n");
-        scanf("%d", &comprobacion);
-        //fgets(resp, sizeof(resp), stdin);
-        //resp[strcspn(resp, "\n")] = '\0';
+        fgets(resp, sizeof(resp), stdin);
+        resp[strcspn(resp, "\n")] = '\0';
 
-        //while (getchar() != '\n')
-           /// ;
+        while (getchar() != '\n')
+            ;
 
-        if (comprobacion == 1)
+        if (strcmp(resp, "si") == 0)
         {
             printf("Ingrese el numero del medico:");
             scanf("%d", &k);
@@ -116,7 +115,7 @@ void IngresarCitas(char *medicosEspecialidad[], int especialidad, int medicosPor
 
                 printf("Edad: ");
                 scanf("%d", &MatrizCitas[especialidad][k - 1][i - 1][j - 1].pacienteEdad);
-
+                getchar();
                 while (getchar() != '\n')
                     ;
             }
@@ -127,7 +126,7 @@ void IngresarCitas(char *medicosEspecialidad[], int especialidad, int medicosPor
             break;
         }
 
-    } while (comprobacion != 2);
+    } while (strcmp(resp, "si") == 0);
 }
 
 void MostrarCitas(char *medicosEspecialidad[], int especialidad, int medicosPorEspecialidad, int horarios, int dias, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS])

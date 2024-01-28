@@ -81,8 +81,7 @@ void IngresarCitas(char *medicosEspecialidad[], int especialidad, int medicosPor
     do
     {
         printf("Desea ingresar datos? (si/no):\n");
-        fgets(resp, sizeof(resp), stdin);
-        resp[strcspn(resp, "\n")] = '\0';
+        scanf("%3s", resp);
 
         while (getchar() != '\n')
             ;
@@ -157,6 +156,40 @@ void MostrarCitas(char *medicosEspecialidad[], int especialidad, int medicosPorE
     }
 }
 
+void GuardarCitasEnArchivo(const char *nombreArchivo, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS], int especialidades, int medicosPorEspecialidad, int horarios, int dias)
+{
+    FILE *archivo = fopen("DATOS.txt", "w");
+
+    if (archivo == NULL)
+    {
+        perror("Error al abrir el archivo");
+        return;
+    }
+
+    for (int e = 0; e < especialidades; e++)
+    {
+        for (int k = 0; k < medicosPorEspecialidad; k++)
+        {
+            for (int i = 0; i < horarios; i++)
+            {
+                for (int j = 0; j < dias; j++)
+                {
+                    fprintf(archivo, "Especialidad: %s\n, Medico: %s\n, Turno: %d\n, Dia: %d\n, Paciente: %s\n, Edad: %d\n",
+                            MatrizCitas[e][k][i][j].especialidad,
+                            (e == 0) ? MedicosGenerales[k] : ((e == 1) ? MedicosOdonto[k] : ((e == 2) ? MedicosCardiologos[k] : MedicosOtros[k])),
+                            i + 1,
+                            j + 1,
+                            MatrizCitas[e][k][i][j].paciente,
+                            MatrizCitas[e][k][i][j].pacienteEdad);
+                }
+            }
+        }
+    }
+
+    fclose(archivo);
+}
+
+
 int main()
 {
     const int especialidades = 4;
@@ -214,6 +247,7 @@ int main()
     VaciosGenerales(medicosEspecialidad, especialidadElegida, medicosPorEspecialidad, horarios, dias, MatrizCitas);
     IngresarCitas(medicosEspecialidad, especialidadElegida, medicosPorEspecialidad, horarios, dias, MatrizCitas);
     MostrarCitas(medicosEspecialidad, especialidadElegida, medicosPorEspecialidad, horarios, dias, MatrizCitas);
+    GuardarCitasEnArchivo("DATOS.txt", MatrizCitas, especialidades, medicosPorEspecialidad, horarios, dias);
 
     return 0;
 }

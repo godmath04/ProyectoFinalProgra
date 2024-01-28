@@ -174,7 +174,7 @@ void GuardarCitasEnArchivo(const char *nombreArchivo, struct CitaMedica MatrizCi
             {
                 for (int j = 0; j < dias; j++)
                 {
-                    fprintf(archivo, "Especialidad: %s\n, Medico: %s\n, Turno: %d\n, Dia: %d\n, Paciente: %s\n, Edad: %d\n",
+                    fprintf(archivo, "Especialidad: %s\t Medico: %s\tTurno: %d\tDia: %d\tPaciente: %s\tEdad: %d\n",
                             MatrizCitas[e][k][i][j].especialidad,
                             (e == 0) ? MedicosGenerales[k] : ((e == 1) ? MedicosOdonto[k] : ((e == 2) ? MedicosCardiologos[k] : MedicosOtros[k])),
                             i + 1,

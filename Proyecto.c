@@ -33,6 +33,7 @@ void IngresarCitas(int medicosG, int horarios, int dias, struct CitaMedica Matri
 {
     // Variables
     int k, i, j;
+    char *Medicos[] = {"Pablo Villota", "Galo Guevara", "Rafalea Yanouch"};
     // EL usuario debe mencionar si desea ingresar una cita
     char resp[4];
     printf("Desea ingresar datos? (si/no):\n");
@@ -48,16 +49,16 @@ void IngresarCitas(int medicosG, int horarios, int dias, struct CitaMedica Matri
     scanf("%d", &k);
     getchar();
     // Elecion de hora
-    printf("Ingrese el número de hora: ");
+    printf("Ingrese el turno al que desea acceder: ");
     scanf("%d", &i);
     getchar();
 
-    printf("Ingrese el número de día : ");
+    printf("Ingrese el numero de dia (1. Lunes/2.Martes/3.Miercoles/4.Jueves/5.Viernes): ");
     scanf("%d", &j);
     getchar();
 
     // Ingresar la información para la cita
-    printf("Ingrese la información para la cita del médico %d, hora %d, día %d:\n", k, i, j);
+    printf("Ingrese la información para la cita del medico %s, hora %d, dia %d:\n", Medicos[k], i, j);
     printf("Nombre del paciente: ");
     fgets(MatrizCitas[k - 1][i - 1][j - 1].paciente, sizeof(MatrizCitas[k - 1][i - 1][j - 1].paciente), stdin);
 
@@ -76,7 +77,8 @@ void IngresarCitas(int medicosG, int horarios, int dias, struct CitaMedica Matri
 void MedicosGenerales(int medicosG, int horarios, int dias, struct CitaMedica MatrizCitas[medicosG][horarios][dias])
 {
     // Dias Semana
-    char *SemanaDias[] = {"Lun", "Mar", "Mie", "Jue", "Vie"};
+    char *SemanaDias[] = {"1.Lun", "2.Mar", "3.Mie", "4.Jue", "5.Vie"};
+    char *Medicos[] = {"Pablo Villota", "Galo Guevara", "Rafalea Yanouch"};
     printf("\t    ");
     for (int d = 0; d < dias; d++)
     {
@@ -85,7 +87,7 @@ void MedicosGenerales(int medicosG, int horarios, int dias, struct CitaMedica Ma
     printf("\n");
     for (int k = 0; k < medicosG; k++)
     {
-        printf("***Medicos %d:\n", k + 1);
+        printf("%d. Dr \'%s\':\n", k + 1, Medicos[k]);
 
         for (int i = 0; i < horarios; i++)
         {

@@ -15,6 +15,7 @@ struct CitaMedica
     char especialidad[MAX_ESPECIALIDAD];
     int dia;
     int hora;
+    char nombreMedico[50];
 };
 
 char *MedicosGenerales[] = {"Alvaro Roldan", "Naye Garcia", "Mikaela Suarez"};
@@ -116,6 +117,8 @@ void IngresarCitas(char *medicosEspecialidad[], int especialidad, int medicosPor
                     getchar();
                     while (getchar() != '\n')
                         ;
+                    strcpy(MatrizCitas[especialidad][k - 1][i - 1][j - 1].especialidad, medicosEspecialidad[especialidad]);
+                    strcpy(MatrizCitas[especialidad][k - 1][i - 1][j - 1].nombreMedico, medicosEspecialidad[k - 1]);
                 }
                 else
                 {
@@ -176,13 +179,16 @@ void GuardarCitasEnArchivo(const char *nombreArchivo, struct CitaMedica MatrizCi
             {
                 for (int j = 0; j < dias; j++)
                 {
-                    fprintf(archivo, "Especialidad: %s\tMedico: %s\tTurno: %d\tDia: %d\tPaciente: %s\tEdad: %d\n",
-                            MatrizCitas[e][k][i][j].especialidad,
-                            (e == 0) ? MedicosGenerales[k] : ((e == 1) ? MedicosOdonto[k] : ((e == 2) ? MedicosCardiologos[k] : MedicosOtros[k])),
-                            i + 1,
-                            j + 1,
-                            MatrizCitas[e][k][i][j].paciente,
-                            MatrizCitas[e][k][i][j].pacienteEdad);
+                    if (strcmp(MatrizCitas[e][k][i][j].paciente, "---") != 0)
+                    {
+                        fprintf(archivo, "Especialidad: %s\tMedico: %s\tTurno: %d\tDia: %d\tPaciente: %s\tEdad: %d\n",
+                                MatrizCitas[e][k][i][j].especialidad,
+                                MatrizCitas[e][k][i][j].nombreMedico,
+                                i + 1,
+                                j + 1,
+                                MatrizCitas[e][k][i][j].paciente,
+                                MatrizCitas[e][k][i][j].pacienteEdad);
+                    }
                 }
             }
         }
@@ -286,7 +292,7 @@ int main()
         }
         else if (menuprincipal == 2)
         {
-            printf("Se mostrarán los pacientes.\n");
+            printf("Se mostraran los pacientes.\n");
             LeerArchivo();
             printf("\nFin de la visualizacion de datos.\n");
             printf("¿Que desea realizar ahora?\n");

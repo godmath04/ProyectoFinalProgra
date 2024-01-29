@@ -15,6 +15,10 @@ struct CitaMedica
     int hora;
     char nombreMedico[50];
 };
+// Cada especilidad tiene 3 medicos por lo que se multiplica el valor de la especilidad elegida * MAX medicos 
+// De esta forma se obtiene el valor para iniciar el arreglo
+// Si es la especilidad es 0 * 3 = 0 se inicia en la posicion 0 hasta la 3
+// Especilidad es 3 * 3 se inicia en la posicion 9 
 
 char *Medicos[] = {"General Garcia", "General Comandante", "General Mikaela",
                    "Odonto Luis", "Odonto Manuela", "Odonto Paco",
@@ -40,7 +44,7 @@ int main()
     const int dias = 5;
     int menuprincipal;
     struct CitaMedica MatrizCitas[especialidades][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS];
-    printf("BIENVENIDO A MEDIPLANNER\n");
+    printf("*******BIENVENIDO A MEDIPLANNER******\n");
     printf("Que te gustaria realizar hoy?\n");
     printf("1. Ingreso Pacientes\n2. Mostrar pacientes\n3.Salir\n");
     scanf("%d", &menuprincipal);
@@ -57,6 +61,7 @@ int main()
             if (especialidadElegida >= 0 && especialidadElegida < especialidades)
             {
                 InicializarMatriz(MatrizCitas, especialidades, horarios, dias);
+                // Se usa la cadena char de Medicos para elegirlos y mostrarlos
                 MostrarDisponibilidad(&Medicos[especialidadElegida * MAX_MEDICOS], especialidadElegida, horarios, dias, MatrizCitas);
                 IngresarCitas(&Medicos[especialidadElegida * MAX_MEDICOS], especialidadElegida, horarios, dias, MatrizCitas);
                 GuardarCitasEnArchivo("DATOS.txt", MatrizCitas, especialidades, horarios, dias);
@@ -90,11 +95,12 @@ int main()
 
 void InicializarMatriz(struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS], int especialidades, int horarios, int dias)
 {
+    // Abrimos el archivo para verificar si existe y verificar el contenido, caso contrario lo creamos
     FILE *archivo = fopen("DATOS.txt", "r");
 
     if (archivo != NULL)
     {
-        // Si el archivo existe, carga los datos desde el archivo
+        // Si el archivo existe, se carga los datos
         for (int e = 0; e < especialidades; e++)
         {
             for (int k = 0; k < MAX_MEDICOS; k++)
@@ -111,11 +117,11 @@ void InicializarMatriz(struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS
                 }
             }
             fclose(archivo);
-            return; // Termina la función después de cargar los datos desde el archivo
+            return; // Cuando los datos se carga, la funcion se cierra aqui
         }
     }
 
-    // Si el archivo no existe, inicializa la matriz
+    // Dado que no existe, se inicializa la matriz
     for (int e = 0; e < especialidades; e++)
     {
         for (int k = 0; k < MAX_MEDICOS; k++)
@@ -124,6 +130,7 @@ void InicializarMatriz(struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS
             {
                 for (int j = 0; j < dias; j++)
                 {
+                    // Es importante inicializar con --- porque dicha cadena sirve para comprobar el ingreso del resto de datos
                     strcpy(MatrizCitas[e][k][i][j].paciente, "---");
                     MatrizCitas[e][k][i][j].pacienteEdad = 0;
                 }

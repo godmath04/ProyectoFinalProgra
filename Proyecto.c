@@ -40,7 +40,8 @@ int main()
     const int dias = 5;
     int menuprincipal;
     struct CitaMedica MatrizCitas[especialidades][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS];
-
+    printf("BIENVENIDO A MEDIPLANNER\n");
+    printf("Que te gustaria realizar hoy?\n");
     printf("1. Ingreso Pacientes\n2. Mostrar pacientes\n3.Salir\n");
     scanf("%d", &menuprincipal);
 

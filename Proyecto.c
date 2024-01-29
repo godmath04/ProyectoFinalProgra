@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 #include <string.h>
 
 #define MAX_MEDICOS 3
@@ -18,17 +16,18 @@ struct CitaMedica
     char nombreMedico[50];
 };
 
-char *MedicosGenerales[] = {"Alvaro Roldan", "Naye Garcia", "Mikaela Suarez"};
-char *MedicosOdonto[] = {"Luis Pineda", "Paco Manuel", "Natalia Remache"};
-char *MedicosCardiologos[] = {"Galo Guevara", "Rafaela Yanouch", "Mikaela Estevez"};
-char *MedicosOtros[] = {"Galo Manuel", "Estefania Paez", "Mikaela Estevez", "Luciana Zapato"};
+char *Medicos[] = {"General Garcia", "General Comandante", "General Mikaela",
+                   "Odonto Luis", "Odonto Manuela", "Odonto Paco",
+                   "Cardio Guevara", "Cardio Rafaela", "Cardio Estevez",
+                   "Otro Gomez", "Otro Paez", "OtroZapato"};
+
 char *Especialidades[] = {"Medicina General", "Odontologia", "Cardiologia", "Otros"};
 
-void InicializarMatriz(struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS], int especialidades, int medicosPorEspecialidad, int horarios, int dias)
+void InicializarMatriz(struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS], int especialidades, int horarios, int dias)
 {
     for (int e = 0; e < especialidades; e++)
     {
-        for (int k = 0; k < medicosPorEspecialidad; k++)
+        for (int k = 0; k < MAX_MEDICOS; k++)
         {
             for (int i = 0; i < horarios; i++)
             {
@@ -42,20 +41,13 @@ void InicializarMatriz(struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS
     }
 }
 
-void VaciosGenerales(char *medicosEspecialidad[], int especialidad, int medicosPorEspecialidad, int horarios, int dias, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS])
+void MostrarDisponibilidad(char *medicosEspecialidad[], int especialidad, int horarios, int dias, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS])
 {
-    char *SemanaDias[] = {"1.Lun", "2.Mar", "3.Mie", "4.Jue", "5.Vie"};
+    printf("***** LISTADO DE DOCTORES Y FECHAS DISPONBLES %s*****\n", Especialidades[especialidad]);
 
-    printf("%-15s", "");
-    for (int d = 0; d < dias; d++)
+    for (int k = 0; k < MAX_MEDICOS; k++)
     {
-        printf("%-15s|", SemanaDias[d]);
-    }
-    printf("\n");
-
-    for (int k = 0; k < medicosPorEspecialidad; k++)
-    {
-        printf("%d. Dr '%s' (%s):\n", k + 1, medicosEspecialidad[k], MatrizCitas[especialidad][k][0][0].especialidad);
+        printf("%d. Dr/a. '%s':\n", k + 1, medicosEspecialidad[k]);
 
         for (int i = 0; i < horarios; i++)
         {
@@ -70,55 +62,41 @@ void VaciosGenerales(char *medicosEspecialidad[], int especialidad, int medicosP
     }
 }
 
-void IngresarCitas(char *medicosEspecialidad[], int especialidad, int medicosPorEspecialidad, int horarios, int dias, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS])
+
+void IngresarCitas(char *medicosEspecialidad[], int especialidad, int horarios, int dias, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS])
 {
     char resp[4];
-    char *SemanaDias[] = {"1.Lun", "2.Mar", "3.Mie", "4.Jue", "5.Vie"};
 
     do
     {
-        int k, i, j, d;
+        int k, i, j;
 
         printf("Desea ingresar datos? (si/no):\n");
         scanf("%3s", resp);
-
-        while (getchar() != '\n')
-            ;
 
         if (strcmp(resp, "si") == 0)
         {
             printf("Ingrese el numero del medico: ");
             scanf("%d", &k);
-            d = k - 1;
-            getchar();
 
             printf("Ingrese el turno al que desea acceder: ");
             scanf("%d", &i);
-            getchar();
 
-            printf("Ingrese el numero de dia:\n1. Lunes\n2.Martes\n3.Miercoles\n4.Jueves\n5.Viernes\n");
+            printf("Ingrese el numero de dia (1-5):\n");
             scanf("%d", &j);
-            getchar();
 
-            if (k >= 1 && k <= medicosPorEspecialidad && i >= 1 && i <= horarios && j >= 1 && j <= dias)
+            if (k >= 1 && k <= MAX_MEDICOS && i >= 1 && i <= horarios && j >= 1 && j <= dias)
             {
                 if (strcmp(MatrizCitas[especialidad][k - 1][i - 1][j - 1].paciente, "---") == 0)
                 {
-                    printf("Ingrese la informacion para la cita con el medico '%s', en el turno %d, el dia %s:\n", medicosEspecialidad[k - 1], i, SemanaDias[j-1]);
+                    printf("Ingrese la informacion para la cita con el medico '%s', en el turno %d, el dia %d:\n", medicosEspecialidad[k - 1], i, j);
                     printf("Nombre del paciente: ");
-                    fgets(MatrizCitas[especialidad][k - 1][i - 1][j - 1].paciente, sizeof(MatrizCitas[especialidad][k - 1][i - 1][j - 1].paciente), stdin);
-
-                    while (getchar() != '\n')
-                        ;
-
-                    MatrizCitas[especialidad][k - 1][i - 1][j - 1].paciente[strcspn(MatrizCitas[especialidad][k - 1][i - 1][j - 1].paciente, "\n")] = '\0';
-
+                    scanf("%s", MatrizCitas[especialidad][k - 1][i - 1][j - 1].paciente);
+                    fflush(stdin);
                     printf("Edad: ");
                     scanf("%d", &MatrizCitas[especialidad][k - 1][i - 1][j - 1].pacienteEdad);
-                    getchar();
-                    while (getchar() != '\n')
-                        ;
-                    strcpy(MatrizCitas[especialidad][k - 1][i - 1][j - 1].especialidad, medicosEspecialidad[especialidad]);
+
+                    strcpy(MatrizCitas[especialidad][k - 1][i - 1][j - 1].especialidad, Especialidades[especialidad]);
                     strcpy(MatrizCitas[especialidad][k - 1][i - 1][j - 1].nombreMedico, medicosEspecialidad[k - 1]);
                 }
                 else
@@ -134,38 +112,9 @@ void IngresarCitas(char *medicosEspecialidad[], int especialidad, int medicosPor
     } while (strcmp(resp, "si") == 0);
 }
 
-void MostrarCitas(char *medicosEspecialidad[], int especialidad, int medicosPorEspecialidad, int horarios, int dias, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS])
-{
-    char *SemanaDias[] = {"1.Lun", "2.Mar", "3.Mie", "4.Jue", "5.Vie"};
-
-    printf("%-10s", "");
-    for (int d = 0; d < dias; d++)
-    {
-        printf("%-10s\t|", SemanaDias[d]);
-    }
-    printf("\n");
-
-    for (int k = 0; k < medicosPorEspecialidad; k++)
-    {
-        printf("%d. Dr/a. '%s':\n", k + 1, medicosEspecialidad[k], MatrizCitas[especialidad][k][0][0].especialidad);
-
-        for (int i = 0; i < horarios; i++)
-        {
-            printf("Turno %d:\t", i + 1);
-            for (int j = 0; j < dias; j++)
-            {
-                printf("\'%s\' |", MatrizCitas[especialidad][k][i][j].paciente);
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }
-}
-
-void GuardarCitasEnArchivo(const char *nombreArchivo, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS], int especialidades, int medicosPorEspecialidad, int horarios, int dias)
+void GuardarCitasEnArchivo(const char *nombreArchivo, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS], int especialidades, int horarios, int dias)
 {
     FILE *archivo = fopen(nombreArchivo, "a");
-
     if (archivo == NULL)
     {
         perror("Error al abrir el archivo");
@@ -174,7 +123,7 @@ void GuardarCitasEnArchivo(const char *nombreArchivo, struct CitaMedica MatrizCi
 
     for (int e = 0; e < especialidades; e++)
     {
-        for (int k = 0; k < medicosPorEspecialidad; k++)
+        for (int k = 0; k < MAX_MEDICOS; k++)
         {
             for (int i = 0; i < horarios; i++)
             {
@@ -183,12 +132,8 @@ void GuardarCitasEnArchivo(const char *nombreArchivo, struct CitaMedica MatrizCi
                     if (strcmp(MatrizCitas[e][k][i][j].paciente, "---") != 0)
                     {
                         fprintf(archivo, "Especialidad: %s\tMedico: %s\tTurno: %d\tDia: %d\tPaciente: %s\tEdad: %d\n",
-                                Especialidades[e], // Utilizar el array de especialidades
-                                MatrizCitas[e][k][i][j].nombreMedico,
-                                i + 1,
-                                j + 1,
-                                MatrizCitas[e][k][i][j].paciente,
-                                MatrizCitas[e][k][i][j].pacienteEdad);
+                                Especialidades[e], Medicos[k], i + 1, j + 1,
+                                MatrizCitas[e][k][i][j].paciente, MatrizCitas[e][k][i][j].pacienteEdad);
                     }
                 }
             }
@@ -225,11 +170,11 @@ void LeerArchivo()
 int main()
 {
     const int especialidades = 4;
-    const int medicosPorEspecialidad = 3;
     const int horarios = 6;
     const int dias = 5;
     int menuprincipal;
     struct CitaMedica MatrizCitas[especialidades][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS];
+
     printf("1. Ingreso Pacientes\n2. Mostrar pacientes\n3.Salir\n");
     scanf("%d", &menuprincipal);
 
@@ -242,50 +187,17 @@ int main()
             scanf("%d", &especialidadElegida);
             especialidadElegida--;
 
-            switch (especialidadElegida)
+            if (especialidadElegida >= 0 && especialidadElegida < especialidades)
             {
-            case 0:
-                printf("***** LISTADO DE DOCTORES Y FECHAS DISPONBLES MEDICINA GENERAL*****\n");
-                break;
-            case 1:
-                printf("***** LISTADO DE DOCTORES Y FECHAS DISPONBLES ODONTOLOGIA*****\n");
-                break;
-            case 2:
-                printf("***** LISTADO DE DOCTORES Y FECHAS DISPONBLES CARDIOLOGIA*****\n");
-                break;
-            case 3:
-                printf("***** LISTADO DE DOCTORES Y FECHAS DISPONBLES OTRAS ESPECIALIDADES*****\n");
-                break;
-            default:
-                printf("Opción no valida.\n");
-                return 1;
+                InicializarMatriz(MatrizCitas, especialidades, horarios, dias);
+                MostrarDisponibilidad(&Medicos[especialidadElegida * MAX_MEDICOS], especialidadElegida, horarios, dias, MatrizCitas);
+                IngresarCitas(&Medicos[especialidadElegida * MAX_MEDICOS], especialidadElegida, horarios, dias, MatrizCitas);
+                GuardarCitasEnArchivo("DATOS.txt", MatrizCitas, especialidades, horarios, dias);
             }
-
-            char **medicosEspecialidad;
-            switch (especialidadElegida)
+            else
             {
-            case 0:
-                medicosEspecialidad = MedicosGenerales;
-                break;
-            case 1:
-                medicosEspecialidad = MedicosOdonto;
-                break;
-            case 2:
-                medicosEspecialidad = MedicosCardiologos;
-                break;
-            case 3:
-                medicosEspecialidad = MedicosOtros;
-                break;
-            default:
-                printf("Opción no valida.\n");
-                return 1;
+                printf("Opción no válida.\n");
             }
-
-            InicializarMatriz(MatrizCitas, especialidades, medicosPorEspecialidad, horarios, dias);
-            VaciosGenerales(medicosEspecialidad, especialidadElegida, medicosPorEspecialidad, horarios, dias, MatrizCitas);
-            IngresarCitas(medicosEspecialidad, especialidadElegida, medicosPorEspecialidad, horarios, dias, MatrizCitas);
-            MostrarCitas(medicosEspecialidad, especialidadElegida, medicosPorEspecialidad, horarios, dias, MatrizCitas);
-            GuardarCitasEnArchivo("DATOS.txt", MatrizCitas, especialidades, medicosPorEspecialidad, horarios, dias);
 
             printf("Que desea realizar ahora?\n");
             printf("1. Ingreso Pacientes\n2. Mostrar pacientes\n3.Salir\n");

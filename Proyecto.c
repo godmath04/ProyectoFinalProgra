@@ -163,7 +163,7 @@ void MostrarCitas(char *medicosEspecialidad[], int especialidad, int medicosPorE
 
 void GuardarCitasEnArchivo(const char *nombreArchivo, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS], int especialidades, int medicosPorEspecialidad, int horarios, int dias)
 {
-    FILE *archivo = fopen(nombreArchivo, "a");
+    FILE *archivo = fopen(nombreArchivo, "w");
 
     if (archivo == NULL)
     {
@@ -286,7 +286,7 @@ int main()
             MostrarCitas(medicosEspecialidad, especialidadElegida, medicosPorEspecialidad, horarios, dias, MatrizCitas);
             GuardarCitasEnArchivo("DATOS.txt", MatrizCitas, especialidades, medicosPorEspecialidad, horarios, dias);
 
-            printf("¿Que desea realizar ahora?\n");
+            printf("Que desea realizar ahora?\n");
             printf("1. Ingreso Pacientes\n2. Mostrar pacientes\n3.Salir\n");
             scanf("%d", &menuprincipal);
         }
@@ -295,7 +295,7 @@ int main()
             printf("Se mostraran los pacientes.\n");
             LeerArchivo();
             printf("\nFin de la visualizacion de datos.\n");
-            printf("¿Que desea realizar ahora?\n");
+            printf("Que desea realizar ahora?\n");
             printf("1. Ingreso Pacientes\n2. Mostrar pacientes\n3.Salir\n");
             scanf("%d", &menuprincipal);
         }

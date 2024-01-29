@@ -86,7 +86,7 @@ void IngresarCitas(char *medicosEspecialidad[], int especialidad, int medicosPor
 
         if (strcmp(resp, "si") == 0)
         {
-            printf("Ingrese el numero del medico:");
+            printf("Ingrese el numero del medico: ");
             scanf("%d", &k);
             d = k - 1;
             getchar();
@@ -103,7 +103,7 @@ void IngresarCitas(char *medicosEspecialidad[], int especialidad, int medicosPor
             {
                 if (strcmp(MatrizCitas[especialidad][k - 1][i - 1][j - 1].paciente, "---") == 0)
                 {
-                    printf("Ingrese la informacion para la cita con el medico '%s', en el turno %d, el dia %s:\n", medicosEspecialidad[k - 1], i, SemanaDias[j]);
+                    printf("Ingrese la informacion para la cita con el medico '%s', en el turno %d, el dia %s:\n", medicosEspecialidad[k - 1], i, SemanaDias[j-1]);
                     printf("Nombre del paciente: ");
                     fgets(MatrizCitas[especialidad][k - 1][i - 1][j - 1].paciente, sizeof(MatrizCitas[especialidad][k - 1][i - 1][j - 1].paciente), stdin);
 
@@ -163,7 +163,7 @@ void MostrarCitas(char *medicosEspecialidad[], int especialidad, int medicosPorE
 
 void GuardarCitasEnArchivo(const char *nombreArchivo, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS], int especialidades, int medicosPorEspecialidad, int horarios, int dias)
 {
-    FILE *archivo = fopen(nombreArchivo, "w");
+    FILE *archivo = fopen(nombreArchivo, "a");
 
     if (archivo == NULL)
     {

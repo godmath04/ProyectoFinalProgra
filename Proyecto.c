@@ -22,6 +22,7 @@ char *MedicosGenerales[] = {"Alvaro Roldan", "Naye Garcia", "Mikaela Suarez"};
 char *MedicosOdonto[] = {"Luis Pineda", "Paco Manuel", "Natalia Remache"};
 char *MedicosCardiologos[] = {"Galo Guevara", "Rafaela Yanouch", "Mikaela Estevez"};
 char *MedicosOtros[] = {"Galo Manuel", "Estefania Paez", "Mikaela Estevez", "Luciana Zapato"};
+char *Especialidades[] = {"Medicina General", "Odontologia", "Cardiologia", "Otros"};
 
 void InicializarMatriz(struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS], int especialidades, int medicosPorEspecialidad, int horarios, int dias)
 {
@@ -163,7 +164,7 @@ void MostrarCitas(char *medicosEspecialidad[], int especialidad, int medicosPorE
 
 void GuardarCitasEnArchivo(const char *nombreArchivo, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS], int especialidades, int medicosPorEspecialidad, int horarios, int dias)
 {
-    FILE *archivo = fopen(nombreArchivo, "w");
+    FILE *archivo = fopen(nombreArchivo, "a");
 
     if (archivo == NULL)
     {
@@ -182,7 +183,7 @@ void GuardarCitasEnArchivo(const char *nombreArchivo, struct CitaMedica MatrizCi
                     if (strcmp(MatrizCitas[e][k][i][j].paciente, "---") != 0)
                     {
                         fprintf(archivo, "Especialidad: %s\tMedico: %s\tTurno: %d\tDia: %d\tPaciente: %s\tEdad: %d\n",
-                                MatrizCitas[e][k][i][j].especialidad,
+                                Especialidades[e], // Utilizar el array de especialidades
                                 MatrizCitas[e][k][i][j].nombreMedico,
                                 i + 1,
                                 j + 1,

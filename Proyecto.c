@@ -89,6 +89,32 @@ int main()
 
 void InicializarMatriz(struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS], int especialidades, int horarios, int dias)
 {
+    FILE *archivo = fopen("DATOS.txt", "r");
+
+    if (archivo != NULL)
+    {
+        // Si el archivo existe, carga los datos desde el archivo
+        for (int e = 0; e < especialidades; e++)
+        {
+            for (int k = 0; k < MAX_MEDICOS; k++)
+            {
+                for (int i = 0; i < horarios; i++)
+                {
+                    for (int j = 0; j < dias; j++)
+                    {
+                        fscanf(archivo, "Especialidad: %s\tMedico: %s\tTurno: %d\tDia: %d\tPaciente: %s\tEdad: %d\n",
+                                MatrizCitas[e][k][i][j].especialidad, MatrizCitas[e][k][i][j].nombreMedico,
+                                &MatrizCitas[e][k][i][j].hora, &MatrizCitas[e][k][i][j].dia,
+                                MatrizCitas[e][k][i][j].paciente, &MatrizCitas[e][k][i][j].pacienteEdad);
+                    }
+                }
+            }
+            fclose(archivo);
+            return; // Termina la función después de cargar los datos desde el archivo
+        }
+    }
+
+    // Si el archivo no existe, inicializa la matriz
     for (int e = 0; e < especialidades; e++)
     {
         for (int k = 0; k < MAX_MEDICOS; k++)
@@ -177,7 +203,7 @@ void IngresarCitas(char *medicosEspecialidad[], int especialidad, int horarios, 
 
 void GuardarCitasEnArchivo(const char *nombreArchivo, struct CitaMedica MatrizCitas[][MAX_MEDICOS][MAX_HORARIOS][MAX_DIAS], int especialidades, int horarios, int dias)
 {
-    FILE *archivo = fopen(nombreArchivo, "a");
+    FILE *archivo = fopen(nombreArchivo, "w");
     if (archivo == NULL)
     {
         perror("Error al abrir el archivo");
